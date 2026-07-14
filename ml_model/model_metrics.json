@@ -1,0 +1,25 @@
+{
+  "randomForest": {
+    "accuracy": 0.8366,
+    "precision": 0.7611,
+    "recall": 0.7358,
+    "f1Score": 0.7482
+  },
+  "lastTrainedAt": "2026-07-13T07:55:26Z",
+  "datasetSize": 89775,
+  "featureNames": [
+    "url_length",
+    "has_ip",
+    "has_https",
+    "special_char_count",
+    "subdomain_count",
+    "keyword_score",
+    "digit_count",
+    "hyphen_count",
+    "entropy",
+    "domain_char_ngrams(tfidf,3-5,max400)"
+  ],
+  "trainRows": 71820,
+  "testRows": 17955,
+  "modelVersion": 2
+}

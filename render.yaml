@@ -1,0 +1,38 @@
+# render.yaml
+# Infrastructure-as-code untuk Render.com. Bisa dipakai lewat "Blueprint"
+# di dashboard Render (New + > Blueprint > pilih repo ini), ATAU cukup
+# di-setup manual lewat dashboard (lihat Bab "Hosting Backend ke Render"
+# di buku panduan) -- keduanya menghasilkan konfigurasi yang sama persis.
+#
+# CATATAN: database PostgreSQL TIDAK didefinisikan di sini karena kita
+# memakai Supabase (eksternal), bukan Render Postgres. DATABASE_URL diisi
+# manual sebagai environment variable yang menunjuk ke Supabase.
+
+services:
+  - type: web
+    name: judas-backend
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        sync: false   # isi manual di dashboard Render dengan connection string Supabase
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false   # isi dengan URL frontend Vercel, mis. https://judas.vercel.app
+      - key: MODEL_PATH
+        value: "ml_model/random_forest_model.joblib"
+      - key: METRICS_PATH
+        value: "ml_model/model_metrics.json"
+      - key: CONFIDENCE_THRESHOLD
+        value: "0.5"

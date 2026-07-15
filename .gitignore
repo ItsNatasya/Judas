@@ -3,7 +3,6 @@ venv/
 
 # File Rahasia / Environment Variables
 .env
-.env.example
 
 # Cache Python
 __pycache__/

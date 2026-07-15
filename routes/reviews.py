@@ -134,6 +134,12 @@ def approve_review(review_id):
     Setujui Ulasan (Admin)
     ---
     tags: [Reviews]
+    parameters:
+      - in: path
+        name: review_id
+        required: true
+        type: integer
+        description: ID ulasan yang akan disetujui
     security: [{Bearer: []}]
     responses:
       200:

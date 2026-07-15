@@ -138,10 +138,11 @@ def scan_history():
     limit = min(request.args.get("limit", 10, type=int), 100)
     label = request.args.get("label")
 
-    from flask_jwt_extended import get_jwt_identity
-    admin_id = get_jwt_identity()
+    # from flask_jwt_extended import get_jwt_identity
+    # admin_id = get_jwt_identity()
 
-    query = ScanLog.query.filter_by(admin_id=int(admin_id))
+    query = ScanLog.query 
+    # .filter_by(admin_id=int(admin_id))
     if label:
         query = query.filter_by(label=label)
     query = query.order_by(ScanLog.scanned_at.desc())
@@ -163,6 +164,12 @@ def scan_result(scan_id):
     Get Scan Result by ID
     ---
     tags: [Scan]
+    parameters:
+      - in: path
+        name: scan_id
+        required: true
+        type: integer
+        description: ID scan yang ingin dilihat detailnya
     security: [{Bearer: []}]
     responses:
       200:

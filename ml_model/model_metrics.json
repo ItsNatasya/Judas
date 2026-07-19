@@ -1,11 +1,11 @@
 {
   "randomForest": {
-    "accuracy": 0.8366,
-    "precision": 0.7611,
-    "recall": 0.7358,
-    "f1Score": 0.7482
+    "accuracy": 0.8531,
+    "precision": 0.7999,
+    "recall": 0.7397,
+    "f1Score": 0.7686
   },
-  "lastTrainedAt": "2026-07-13T07:55:26Z",
+  "lastTrainedAt": "2026-07-19T15:16:57Z",
   "datasetSize": 89775,
   "featureNames": [
     "url_length",
@@ -17,9 +17,14 @@
     "digit_count",
     "hyphen_count",
     "entropy",
+    "digit_ratio",
+    "tld_risk",
+    "keyword_score_leet",
     "domain_char_ngrams(tfidf,3-5,max400)"
   ],
   "trainRows": 71820,
   "testRows": 17955,
-  "modelVersion": 2
+  "modelVersion": 3,
+  "recallNoKeywordMatch": 0.6406,
+  "noKeywordMatchTestRows": 15738
 }

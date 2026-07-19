@@ -87,7 +87,7 @@ def scan_url():
     whois_result = whois_lookup(url)
 
     risk_score = compute_risk_score(rf_score, crawl_result, whois_result)
-    label = label_from_confidence(rf_score, threshold)
+    label = label_from_confidence(rf_score, threshold, crawl_result)
 
     admin_identity = get_optional_admin()
     log = ScanLog(

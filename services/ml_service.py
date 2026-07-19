@@ -102,5 +102,26 @@ def compute_risk_score(rf_score: float, crawl_result: dict | None, whois_result:
     return max(0, min(100, round(score)))
 
 
-def label_from_confidence(confidence: float, threshold: float) -> str:
+def label_from_confidence(confidence: float, threshold: float, crawl_result: dict | None = None) -> str:
+    """Menentukan label akhir ('Judol'/'Aman').
+
+    CATATAN PENTING (perbaikan Juli 2026): sebelumnya fungsi ini HANYA
+    memakai rf_score -- crawl_result (konten halaman sungguhan) hanya
+    dipakai untuk menaikkan riskScore, TIDAK PERNAH memengaruhi label.
+    Ini adalah celah nyata: domain "burner" acak seperti "03032004.net"
+    atau "levhoo.com" tidak punya sinyal leksikal apapun (tidak ada
+    keyword, TLD umum .com/.net) sehingga rf_score nyaris selalu di
+    bawah threshold -- padahal HALAMAN yang dikunjungi crawler sangat
+    mungkin literally memuat kata "slot"/"togel"/dst. karena situs judol
+    tidak bisa menyembunyikan kontennya sendiri, hanya nama domainnya.
+
+    Sekarang: kalau crawler berhasil mengunjungi situs (status="success")
+    DAN menemukan gambling_content_hit=True, itu dianggap sinyal kuat
+    yang men-override rf_score borderline -- domain dilabeli "Judol"
+    meskipun skor leksikal rendah. Ini menutup celah yang tidak bisa
+    diselesaikan fitur leksikal manapun (nama domain acak memang secara
+    desain tidak mengandung informasi apa-apa; kontennya yang harus jadi
+    penentu)."""
+    if crawl_result and crawl_result.get("status") == "success" and crawl_result.get("gambling_content_hit"):
+        return "Judol"
     return "Judol" if confidence >= threshold else "Aman"

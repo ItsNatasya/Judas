@@ -210,7 +210,7 @@ export default function HomePage() {
             <div className="w-7 h-7 bg-gradient-to-br from-red-500 to-orange-500 rounded-lg flex items-center justify-center"><Shield size={13} className="text-white" /></div>
             <span style={{ fontWeight: 900, letterSpacing: "0.12em", color: "#ff4d4d", fontSize: "0.95rem" }}>JUDAS</span>
           </div>
-          <p className="text-gray-600 text-center" style={{ fontSize: "0.72rem" }}>© 2024 JUDAS — Judi URL Detection & Analysis System. Semua hak dilindungi.</p>
+          <p className="text-gray-600 text-center" style={{ fontSize: "0.72rem" }}>© 2026 JUDAS — Judi URL Detection & Analysis System. Semua hak dilindungi.</p>
           <div className="flex gap-4">
             {["Privasi", "Syarat", "API"].map((l) => (
               <button key={l} className="text-gray-500 hover:text-gray-300 transition-colors" style={{ fontSize: "0.72rem" }}>{l}</button>

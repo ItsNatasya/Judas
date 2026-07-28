@@ -152,19 +152,41 @@ def normalize_leetspeak(s: str) -> str:
 
 
 def extract_url_features(url: str) -> dict:
+    """PENTING (perbaikan bug train-serving skew, Juli 2026):
+    url_length dan special_char_count DULU dihitung dari `url` PENUH
+    (termasuk path/query, mis. "https://vt.tiktok.com/ZSXotHFaW/"), tapi
+    train_model.py melatih model dari kolom `domain` di
+    judol_dataset.csv/safe_dataset.csv yang isinya domain POLOS tanpa
+    path (mis. "00789f.com"). Akibatnya url_length saat training selalu
+    pendek (~panjang domain), sedangkan saat scan sungguhan URL nyata
+    (short-link TikTok/Bit.ly dengan ID acak di path, URL dengan query
+    string, dll) punya url_length jauh lebih besar dari apapun yang
+    pernah dilihat model -- Random Forest salah mengartikan "URL panjang
+    dengan path acak" sebagai sinyal judol, padahal itu cuma pola normal
+    short-link. Contoh nyata: "vt.tiktok.com" -> P(judol)=0.40 (aman),
+    tapi "https://vt.tiktok.com/ZSXotHFaW/" -> P(judol)=0.53 (positif
+    palsu) -- hostname-nya PERSIS SAMA.
+
+    Perbaikan: url_length dan special_char_count SEKARANG dihitung dari
+    HOSTNAME saja, konsisten dengan data training. Path/query URL boleh
+    tetap disimpan di scan_log untuk keperluan crawl (lihat crawler.py),
+    tapi TIDAK ikut jadi fitur leksikal untuk model.
+    """
     url = normalize_input(url)
     parsed = urlparse(url)
     hostname = (parsed.hostname or "").lower()
     scheme = (parsed.scheme or "").lower()
 
-    special_char_count = sum(1 for c in url if c in SPECIAL_CHARS)
+    # Dihitung dari HOSTNAME saja (bukan url penuh) supaya konsisten
+    # dengan data training yang berasal dari domain polos tanpa path.
+    special_char_count = sum(1 for c in hostname if c in SPECIAL_CHARS)
     subdomain_count = max(hostname.count(".") - 1, 0) if hostname else 0
     digit_count = sum(1 for c in hostname if c.isdigit())
     hyphen_count = hostname.count("-")
     digit_ratio = round(digit_count / len(hostname), 4) if hostname else 0.0
 
     return {
-        "url_length": len(url),
+        "url_length": len(hostname),
         "has_ip": 1 if _looks_like_ip(hostname) else 0,
         "has_https": 1 if scheme == "https" else 0,
         "special_char_count": special_char_count,

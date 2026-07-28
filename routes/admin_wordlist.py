@@ -152,6 +152,12 @@ def delete_keyword(kw_id):
     ---
     tags: [Admin Wordlist]
     security: [{Bearer: []}]
+    parameters:
+      - name: kw_id
+        in: path
+        type: integer
+        required: true
+        description: ID kata kunci yang akan dihapus
     responses:
       200:
         description: Kata kunci dihapus

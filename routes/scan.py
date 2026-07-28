@@ -109,6 +109,15 @@ def scan_url():
         "featuresUsed": FEATURES_USED,
         "scannedAt": log.scanned_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "fromCache": False,
+        # Field baru (aditif, tidak mengubah kontrak lama): situs ini
+        # sendiri mungkin bersih (label bisa tetap "Aman"), tapi crawler
+        # menemukan iframe/script/redirect judol dari domain PIHAK
+        # KETIGA di dalamnya -- indikasi situs disusupi iklan/pop-up
+        # judol, bukan berarti situs ini sendiri situs judol. Frontend
+        # sebaiknya tampilkan ini sebagai peringatan terpisah, bukan
+        # disamakan dengan label "Judol".
+        "embeddedGamblingWarning": crawl_result.get("embedded_gambling_hit", False),
+        "embeddedGamblingSources": crawl_result.get("embedded_sources", []),
     }, "Scan berhasil dilakukan.")
 
 

@@ -157,11 +157,17 @@ def approve_review(review_id):
 @reviews_bp.delete("/admin/reviews/<int:review_id>")
 @admin_required
 def delete_review(review_id):
-    """
+     """
     Hapus Ulasan (Admin)
     ---
     tags: [Reviews]
     security: [{Bearer: []}]
+    parameters:
+      - name: review_id
+        in: path
+        type: integer
+        required: true
+        description: ID ulasan yang akan dihapus
     responses:
       200:
         description: Ulasan dihapus
